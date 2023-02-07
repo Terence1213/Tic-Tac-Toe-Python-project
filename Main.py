@@ -1,9 +1,6 @@
 #Make a tic - tac - toe game.
 #Plan:
-# Make the game more readable and user friendly.
-# WINNING DECISION MAKING ISN'T WORKING CORRECTLY
-# Then I start working on the AI.
-# Bonus feature: Make it so whoever starts the game first is random.
+# Bonus feature: Add a timing delay when the AI is playing.
 import random
 
 table = [{"A1": "-", "A2": "-", "A3": "-"},
@@ -38,7 +35,8 @@ def decideWinner(player, table):
         previousKey = ""
         #As already stated, if any keys are different from one another, playerWon is set to False.
         for key in row:
-            if previousKey != "" and previousKey != row.get(key):
+            #If any keys are different from each other, or one of the keys is blank, then the player doesn't win.
+            if (previousKey != "" and previousKey != row.get(key)) or row.get(key) == "-":
                 playerWon = False
             previousKey = row.get(key)
 
@@ -46,7 +44,7 @@ def decideWinner(player, table):
         if playerWon == True:
             if player == "X":
                 printTable(table)
-                print("\nYou won!")
+                print("\nYou won!!")
                 gameWon = True
                 break
             elif player == "O":
@@ -62,7 +60,7 @@ def decideWinner(player, table):
             if player == "X":
                 printTable(table)
                 gameWon = True
-                print("\nYou won!")
+                print("\nYou won!!!!")
             elif player == "O":
                 printTable(table)
                 gameWon = True
@@ -92,7 +90,7 @@ def decideWinner(player, table):
 
     return gameWon
 
-def startTurn(player):
+def startTurn(player, isAI):
     print()
     printTable(table)
     turnComplete = False
@@ -108,9 +106,11 @@ def startTurn(player):
     while inputValid == False or turnComplete == False:
 
         if player == "X":
-            playerChoice = input("Pease enter a coordinate of your choice! (which is unchosen) - (A1, A2, A3 etc..): ")
-        elif player == "O":
+            playerChoice = input("\nPlayer 1: please enter a coordinate of your choice! (which is unchosen) - (A1, A2, A3 etc..): ")
+        elif player == "O" and isAI == True:
             playerChoice = random.choice(choiceList)
+        elif player == "O" and isAI == False:
+            playerChoice = input("\nPlayer 2: please enter a coordinate of your choice! (which is unchosen) - (A1, A2, A3 etc..): ")
 
         rowNum = 0
         for row in table:
@@ -141,14 +141,32 @@ def clearTable():
 def startGame():
 
     clearTable()
-
+    order = random.randrange(0, 2)
+    isAI = False
     while True:
-        startTurn("X")
-        if decideWinner("X", table) == True:
+        choice = int(input("\n\nEnter 1. = Play vs AI\nEnter 2. = Play vs Friend\nEnter your choice (1 - 2): "))
+        if choice == 1:
+            isAI = True
             break
-        startTurn("O")
-        if decideWinner("O", table) == True:
+        elif choice == 2:
             break
+
+    if order == 0:
+        while True:
+            startTurn("X", isAI)
+            if decideWinner("X", table) == True:
+                break
+            startTurn("O", isAI)
+            if decideWinner("O", table) == True:
+                break
+    else:
+        while True:
+            startTurn("O", isAI)
+            if decideWinner("O", table) == True:
+                break
+            startTurn("X", isAI)
+            if decideWinner("X", table) == True:
+                break
 
 def menu():
     while True:
