@@ -1,5 +1,6 @@
 #Make a tic - tac - toe game.
 #Plan:
+# FIGURE OUT WHAT EXACTLY IS HAPPENING BETWEEN LINE 25 AND LINE 53
 # Make it so the game is repeated until someone wins.
 # Make the game more readable and user friendly.
 # Then I start working on the AI.
@@ -22,18 +23,18 @@ def printTable(table):
         print()
 
 def decideWinner(player, table):
+    gameWon = False
     #Converting the table from rows, to columns, so that column wins can be checked.
     columns = [[table[0]["A1"], table[1]["B1"], table[2]["C1"]],
                [table[0]["A2"], table[1]["B2"], table[2]["C2"]],
                [table[0]["A3"], table[1]["B3"], table[2]["C3"]]]
+    playerWon = True
 
     #For each row in the table, if not all values are the same (and not blank), the "player" wins.
     for row in table:
         #Previous key is the value of the previous key in the row. This variable is used to turn playerWon to false
         #If any keys on the same row are different from each other.
         previousKey = ""
-        playerWon = True
-
         #As already stated, if any keys are different from one another, playerWon is set to False.
         for key in row:
             if previousKey != "" and previousKey != row.get(key):
@@ -43,71 +44,88 @@ def decideWinner(player, table):
         #If playerWon is set to true, then the winner is stated.
         if playerWon == True:
             if player == "X":
-                print("You won!")
+                print("You won!!")
+                gameWon = True
                 break
             elif player == "O":
                 print("You lost!")
+                gameWon = True
+                break
 
     #If all values of a column are the same, (and not blank) then the winner is stated.
     for column in columns:
         #Column one of the 3 columns in the variable "columns"
         if column[0] == player and column[0] == column[1] == column[2]:
             if player == "X":
-                print("You won!")
+                gameWon = True
+                print("You won!!!!")
             elif player == "O":
+                gameWon = True
                 print("You lost!")
 
     #Checks for diagonal wins. - Top left to bottom right
     if table[0]["A1"] == player and table[0]["A1"] == table[1]["B2"] == table[2]["C3"]:
         if player == "X":
+            gameWon = True
             print("You won!")
         elif player == "O":
+            gameWon = True
             print("You lost!")
 
     #Checks for diagonal wins - Top right to bottom left.
     if table[0]["A3"] == player and table[0]["A3"] == table[1]["B2"] == table[2]["C1"]:
         if player == "X":
-            print("You won!")
+            gameWon = True
+            print("You won!d")
         elif player == "O":
+            gameWon = True
             print("You lost!")
+    return gameWon
 
-
-def startGame():
+def startTurn(player):
+    print()
     printTable(table)
     turnComplete = False
-    #inputValid is mainly used so that if the user enters an invalid input, rather than an already filled slot,
-    #rather than outputting "already filled slot", the program outputs "invalid input".
+    # inputValid is mainly used so that if the user enters an invalid input, rather than an already filled slot,
+    # rather than outputting "already filled slot", the program outputs "invalid input".
     inputValid = False
 
-    #If an already filled space or an invalid input are chosen, the code loops.
-    while loopComplete == False or turnComplete == False :
+    # If an already filled space or an invalid input are chosen, the code loops.
+    while inputValid == False or turnComplete == False:
 
         playerChoice = input("Pease enter a coordinate of your choice! (which is unchosen) - (A1, A2, A3 etc..")
 
         rowNum = 0
         for row in table:
             for key in row:
-                #If the key, in the loop is equal to that of the player's choice, and it's empty, then the key's value
-                #is filled.
+                # If the key, in the loop is equal to that of the player's choice, and it's empty, then the key's value
+                # is filled.
                 if key == playerChoice and row.get(key) == "-":
-                    table[rowNum][key] = "X"
+                    table[rowNum][key] = player
                     turnComplete = True
                     inputValid = True
-                #If the key is a valid coordinate in the table, but is already filled, an error message is displayed.
+                # If the key is a valid coordinate in the table, but is already filled, an error message is displayed.
                 elif key == playerChoice and row.get(key) != "-":
                     inputValid = True
                     print("That coordinate is already filled!")
             rowNum += 1
 
-        #If the input wasn't in the table range, the below error message is displayed.
-        #This is because that if inputValid is false, then the key which the player enters, is never
-        #equal to any of the keys which are existent in the table.
+        # If the input wasn't in the table range, the below error message is displayed.
+        # This is because that if inputValid is false, then the key which the player enters, is never
+        # equal to any of the keys which are existent in the table.
         if inputValid == False:
             print("Invalid input!, please enter a valid coordinate (A1, A2, A3 etc..")
 
-    decideWinner("X", table)
-    print()
-    printTable(table)
+
+def startGame():
+
+    while True:
+        startTurn("X")
+        if decideWinner("X", table) == True:
+            break
+        startTurn("O")
+        if decideWinner("O", table) == True:
+            break
 
 def menu():
     while True:
