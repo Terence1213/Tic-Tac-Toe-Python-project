@@ -57,7 +57,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV 'C:\My Files\Personal coding stuff\Github Repositories\Temporary'
+set -gx VIRTUAL_ENV 'D:\Python Files\Python Projects\Tic-Tac-Toe-Python-project'
 
 # https://github.com/fish-shell/fish-shell/issues/436 altered PATH handling
 if test (echo $FISH_VERSION | head -c 1) -lt 3

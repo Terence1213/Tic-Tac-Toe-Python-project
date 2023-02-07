@@ -1,6 +1,5 @@
 #Make a tic - tac - toe game.
 #Plan:
-# FIX THE LOOPCOMPLETE AND TURNCOMPLETE VARIABLE NAMES (CURRENTLY VERY CONFUSING)
 # Make it so the game is repeated until someone wins.
 # Make the game more readable and user friendly.
 # Then I start working on the AI.
@@ -76,9 +75,9 @@ def decideWinner(player, table):
 def startGame():
     printTable(table)
     turnComplete = False
-    #loopComplete is mainly used so that if the user enters an invalid input, rather than an already filled slot,
+    #inputValid is mainly used so that if the user enters an invalid input, rather than an already filled slot,
     #rather than outputting "already filled slot", the program outputs "invalid input".
-    loopComplete = False
+    inputValid = False
 
     #If an already filled space or an invalid input are chosen, the code loops.
     while loopComplete == False or turnComplete == False :
@@ -93,17 +92,17 @@ def startGame():
                 if key == playerChoice and row.get(key) == "-":
                     table[rowNum][key] = "X"
                     turnComplete = True
-                    loopComplete = True
-                #If the key is already filled an error message is displayed.
+                    inputValid = True
+                #If the key is a valid coordinate in the table, but is already filled, an error message is displayed.
                 elif key == playerChoice and row.get(key) != "-":
-                    loopComplete = True
+                    inputValid = True
                     print("That coordinate is already filled!")
             rowNum += 1
 
         #If the input wasn't in the table range, the below error message is displayed.
-        #This is because that if loopComplete is false, then the key which the player enters, is never
+        #This is because that if inputValid is false, then the key which the player enters, is never
         #equal to any of the keys which are existent in the table.
-        if loopComplete == False:
+        if inputValid == False:
             print("Invalid input!, please enter a valid coordinate (A1, A2, A3 etc..")
 
     decideWinner("X", table)
